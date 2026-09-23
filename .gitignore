@@ -40,3 +40,20 @@ nltk_data/
 # media-plane's make(1) output directory.
 /services/control-plane/target/
 /services/media-plane/build/
+# Python & Virtualenv
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+env/
+
+# Vendor & Node modules
+vendor/
+node_modules/
+
+# Reports, Logs & Temporary Files
+var/
+*.log
+*.patch
+*REPORT*.md
+*AUDIT*.md
