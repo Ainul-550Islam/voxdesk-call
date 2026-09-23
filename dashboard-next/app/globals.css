@@ -1,0 +1,909 @@
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --border: #e2e5ea;
+  --text: #1a2233;
+  --muted: #6b7280;
+  --primary: #2563eb;
+  --primary-ink: #ffffff;
+  --danger: #dc2626;
+  --danger-bg: #fee2e2;
+  --ok: #16a34a;
+  --ok-bg: #dcfce7;
+  --warn: #d97706;
+  --warn-bg: #fef3c7;
+  --info-bg: #dbeafe;
+  --info: #1d4ed8;
+  --radius: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+/* ---- shell layout ---- */
+.shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  background: #10172a;
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 12px;
+  flex-shrink: 0;
+}
+
+.brand {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 4px 10px 18px;
+}
+
+.sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+
+.sidebar li a {
+  display: block;
+  color: #cbd5e1;
+  padding: 9px 10px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.sidebar li a:hover {
+  background: #1f2a44;
+  color: #ffffff;
+}
+
+.sidebar li a.active {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.sign-out {
+  background: transparent;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.sign-out:hover {
+  background: #1f2a44;
+  color: #ffffff;
+}
+
+.content {
+  flex: 1;
+  padding: 28px 32px;
+  max-width: 1200px;
+}
+
+.page-head h1 {
+  margin: 0 0 4px;
+  font-size: 24px;
+}
+
+.page-head .muted {
+  margin: 0 0 20px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* ---- cards ---- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.card h2 {
+  margin: 0 0 14px;
+  font-size: 16px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.stat .value {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.stat .label {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ---- key/value ---- */
+.kv {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px 24px;
+  margin: 0;
+}
+
+.kv > div {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed var(--border);
+  padding: 6px 0;
+}
+
+.kv dt {
+  color: var(--muted);
+}
+
+.kv dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ---- table ---- */
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+th {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge.completed,
+.badge.connected {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.badge.failed {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.badge.no_answer {
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+
+.badge.ringing,
+.badge.in_progress,
+.badge.dialing,
+.badge.requested {
+  background: var(--info-bg);
+  color: var(--info);
+}
+
+.badge.transferred,
+.badge.none {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* ---- filters + pager ---- */
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.filters input,
+.filters select {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.pager button {
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.pager button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ---- auth screen ---- */
+.auth-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.auth-card h1 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.auth-card label {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.auth-card input {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.auth-card button {
+  margin-top: 8px;
+  padding: 11px;
+  background: var(--primary);
+  color: var(--primary-ink);
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-card button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.error {
+  color: var(--danger);
+  font-size: 13px;
+  margin: 0;
+}
+
+.error-banner {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+
+.loading {
+  padding: 40px;
+  color: var(--muted);
+}
+
+.empty {
+  color: var(--muted);
+  padding: 18px 0;
+}
+
+/* ---- buttons ---- */
+button.primary {
+  padding: 8px 16px;
+  background: var(--primary);
+  color: var(--primary-ink);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.primary:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+button.danger {
+  padding: 6px 12px;
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.danger:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ---- transcript ---- */
+.transcript {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.turn {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  background: #fafbfc;
+}
+
+.turn.user {
+  border-left: 4px solid var(--primary);
+}
+
+.turn.assistant {
+  border-left: 4px solid var(--ok);
+}
+
+.turn.system {
+  border-left: 4px solid var(--warn);
+}
+
+.turn-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.turn-speaker {
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.turn-at {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.turn-text {
+  margin: 0;
+}
+
+/* ---- knowledge search hits ---- */
+.hit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hit-list li {
+  border-bottom: 1px solid var(--border);
+  padding: 12px 0;
+}
+
+.hit-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+/* ---- availability slots ---- */
+.slot-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.slot-list li {
+  background: var(--info-bg);
+  color: var(--info);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* ---- misc form bits ---- */
+input[type="date"] {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+/* ========================================================= identity pages ===
+   Styles for the identity settings surface: the sub-navigation, the form
+   primitives, and the few components (a secret shown once, a confirmation, a
+   reauthentication prompt) that must look unmistakably different from ordinary
+   content. Everything here is additive; nothing above is redefined. */
+
+/* ---- sub-navigation ---- */
+.subnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 20px;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.subnav a {
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: var(--text);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.subnav a:hover {
+  background: #eef2f7;
+  text-decoration: none;
+}
+
+.subnav a.active {
+  background: var(--primary);
+  color: var(--primary-ink);
+}
+
+/* ---- section header ---- */
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.section-head h2 {
+  margin: 0 0 4px;
+}
+
+.section-head p {
+  margin: 0;
+  max-width: 70ch;
+}
+
+.section-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.card h3 {
+  margin: 22px 0 6px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+
+/* ---- form primitives ---- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.field label {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.field .req {
+  color: var(--danger);
+}
+
+.field input,
+.field select,
+.field textarea {
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--surface);
+  color: var(--text);
+  max-width: 560px;
+}
+
+.field textarea {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+
+.hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12.5px;
+  max-width: 70ch;
+}
+
+.check-field {
+  margin-bottom: 12px;
+}
+
+.check-field .hint {
+  margin-left: 24px;
+}
+
+.inline-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.inline-form .field {
+  margin-bottom: 0;
+  min-width: 200px;
+}
+
+.create-form {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 18px;
+  background: #fbfcfe;
+}
+
+.scope-picker {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 0 0 14px;
+}
+
+.scope-picker legend {
+  font-weight: 600;
+  font-size: 13px;
+  padding: 0 6px;
+}
+
+.scope-picker .check-field {
+  margin-bottom: 6px;
+}
+
+/* ---- small text and chips ---- */
+.small {
+  font-size: 12px;
+}
+
+.muted.small {
+  font-size: 12px;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  background: #f1f5f9;
+  padding: 1px 5px;
+  border-radius: 5px;
+}
+
+.chip-list {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.chip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #eef2f7;
+  color: #334155;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 5px;
+  background: #e0e7ff;
+  color: #3730a3;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* ---- notices ---- */
+.notice {
+  background: var(--ok-bg);
+  color: #166534;
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin: 0 0 16px;
+}
+
+.warn-banner {
+  background: var(--warn-bg);
+  color: #92400e;
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin: 0 0 16px;
+}
+
+.stop-banner {
+  background: var(--danger-bg);
+  border: 1px solid var(--danger);
+  color: #7f1d1d;
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+/* ---- secrets, confirmation, reauth ---- */
+.secret {
+  border: 1px solid var(--primary);
+  border-left: 5px solid var(--primary);
+  background: var(--info-bg);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.secret-value {
+  display: block;
+  user-select: all;
+  white-space: pre-wrap;
+  word-break: break-all;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+
+.confirm {
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: #fff7f7;
+}
+
+.confirm-q {
+  margin: 0 0 10px;
+  max-width: 70ch;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.reauth {
+  border: 1px solid var(--warn);
+  background: var(--warn-bg);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.action-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.row-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.row-actions button,
+.action-row button,
+.inline-form button,
+.section-actions button {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.row-actions button:disabled,
+.action-row button:disabled,
+.inline-form button:disabled,
+.section-actions button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+tr.revoked td {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+tr.selected td {
+  background: #f5f8ff;
+}
+
+.button-link {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.kv.compact {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  margin: 12px 0 4px;
+}
+
+/* ---- domains ---- */
+.domain-row {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+
+.domain-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.domain-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
+  margin-top: 12px;
+}
+
+.domain-controls .field {
+  min-width: 220px;
+  margin-bottom: 0;
+}
+
+.dns-record {
+  border: 1px dashed var(--primary);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  background: #f8fbff;
+}
+
+table.record {
+  width: auto;
+  margin: 8px 0;
+}
+
+table.record th {
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--muted);
+  width: 80px;
+}
+
+table.record td,
+table.record th {
+  border-bottom: none;
+  padding: 4px 10px 4px 0;
+}
+
+.enroll {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin: 12px 0;
+}
+
+ul.plain {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+ul.plain li {
+  padding: 4px 0;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 6px;
+}

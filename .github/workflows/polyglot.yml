@@ -1,0 +1,135 @@
+name: polyglot
+
+# The gate for the non-Python services introduced by the expansion roadmap
+# (`services/README.md` "The polyglot gate"). Each job is one language
+# workspace and runs exactly the toolchain that workspace documents in its own
+# README — nothing else. The Python backend has its own gate in `ci.yml`; this
+# workflow exists because a Rust/C++/Go/TypeScript regression cannot fail a
+# workflow that never invokes their compilers.
+#
+# No job reaches the network beyond dependency installation, and no job needs a
+# database, a provider key or a running service: every check here is a build,
+# a lint or a test that runs locally the same way.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: polyglot-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Wire contract (Phase 0): the protobuf vocabulary every other job in this
+  # file is supposed to speak. Compiles with protoc and cross-checks the enum
+  # vocabulary + tenant scoping against app/db/models.py.
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio aiosqlite httpx
+
+      - name: Install protoc
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq protobuf-compiler
+
+      - name: Verify the wire contract
+        run: python scripts/verify_contracts.py
+
+      - name: Contract tests
+        run: python -m pytest tests/test_contracts.py -q
+
+  # Phase 3 — C++ media plane: dependency-free, built and tested with g++ + make.
+  media-plane:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and run both suites
+        working-directory: services/media-plane
+        run: make test
+
+  # Phase 2 — Rust control plane (`voxdesk-control` + `voxdesk-signal`).
+  control-plane:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@1.90.0
+        with:
+          components: rustfmt, clippy
+
+      - name: Rust gates
+        working-directory: services/control-plane
+        run: |
+          cargo fmt --all -- --check
+          cargo check --workspace
+          cargo test --workspace
+          cargo clippy --workspace --all-targets --all-features -- -D warnings
+
+  # Go real-time signaling hub — the differential counterpart of
+  # `services/control-plane/crates/signal`.
+  signal-go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.27"
+          cache-dependency-path: services/signal-go/go.sum
+
+      - name: Go gates
+        working-directory: services/signal-go
+        run: |
+          test -z "$(gofmt -l .)"
+          go vet ./...
+          go test -race -count=1 ./...
+          go build ./...
+
+  # Phase 5 — Go ops tooling (`voxops`).
+  ops-go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.27"
+          cache-dependency-path: services/ops/go.mod
+
+      - name: Go gates
+        working-directory: services/ops
+        run: |
+          test -z "$(gofmt -l .)"
+          go vet ./...
+          go test -race -count=1 ./...
+          go build ./...
+
+  # Phase 1 — Next.js/TypeScript admin console.
+  dashboard-next:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: dashboard-next/package-lock.json
+
+      - name: Install, test, typecheck, build
+        working-directory: dashboard-next
+        run: |
+          npm ci
+          npm test
+          npx tsc --noEmit
+          npm run build

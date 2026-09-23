@@ -1,0 +1,42 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+secrets/
+recordings/
+node_modules/
+dist/
+.pytest_cache/
+.ruff_cache/
+
+# Database dumps and backup artifacts: they contain the whole business,
+# calls and PII included, and must never be committable even by accident.
+backups/
+*.dump
+*.pem
+*.key
+.netrc
+
+# Local tooling state.
+.idea/
+.vscode/
+*.swp
+
+# Realtime gateway build artifacts (Go test/build run from the repo tree).
+/services/realtime/gateway-go/gateway
+
+# Sandbox toolchain + Go module caches, and NLTK corpora: build/download artifacts,
+# not source. restore-tooling.sh recreates the toolchains ($HOME/toolchains, $HOME/go-work).
+toolchains/
+go-work/
+gop/
+/go/pkg/
+nltk_data/
+
+# Rust build output (cargo check/test run from the repo tree).
+/services/realtime/media-engine-rs/target/
+
+# Control-plane build output (cargo check/test run from the repo tree) and the
+# media-plane's make(1) output directory.
+/services/control-plane/target/
+/services/media-plane/build/
